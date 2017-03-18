@@ -7,7 +7,7 @@ ARG VERSION=${VERSION:-1.10.3}
 #ARG SHA256=${SHA256:-1045ac4987a396e2fa5d0011daf8987b612dd2f05181b67507da68cbe7d765c2}
 ARG AUTOINDEX_NAME_LEN=${AUTOINDEX_NAME_LEN:-100}
 
-ENV INSTALL_DIR=/usr/local/nginx \
+ENV INSTALL_DIR=/usr/local/webserver/nginx \
 	DATA_DIR=/data/wwwroot \
 	TEMP_DIR=/tmp/nginx
 
@@ -21,7 +21,6 @@ RUN set -x && \
 		build-base linux-headers libxslt-dev gd-dev openssl-dev libstdc++ libgcc patch git tar curl && \
 	curl -Lk ${DOWN_URL} | tar xz -C ${TEMP_DIR} --strip-components=1 && \
 	curl -Lk https://github.com/xiaoyawl/centos_init/raw/master/nginx-mode.tar.gz|tar xz -C ${TEMP_DIR} && \
-	curl -Lk http://labs.frickle.com/files/ngx_cache_purge-2.0.tar.gz|tar xz -C ${TEMP_DIR} && \
 	git clone https://github.com/arut/nginx-rtmp-module.git -b v1.1.7 && \
 	git clone https://github.com/xiaokai-wang/nginx_upstream_check_module.git && \
 	git clone https://github.com/xiaokai-wang/nginx-stream-upsync-module.git && \
@@ -37,7 +36,7 @@ RUN set -x && \
 		--user=www --group=www \
 		--error-log-path=/data/wwwlogs/error.log \
 		--http-log-path=/data/wwwlogs/access.log \
-		--pid-path=/var/run/nginx/nginx.pid \
+		--pid-path=/usr/local/webserver/nginx/nginx.pid \
 		--lock-path=/var/lock/nginx.lock \
 		--with-pcre \
 		--with-ipv6 \
@@ -76,13 +75,12 @@ RUN set -x && \
 		--add-module=./echo_nginx_module \
 		--add-module=./nginx-rtmp-module \
 		--add-module=./nginx_upstream_check_module \
-		--add-module=./nginx-stream-upsync-module \
-		--add-module=${TEMP_DIR}/ngx_cache_purge-2.0 && \
+		--add-module=./nginx-stream-upsync-module && \
 		#--add-module=./ngx_http_geoip2_module && \
 	make -j$(getconf _NPROCESSORS_ONLN) && \
 	make install && \
 	curl -Lks https://raw.githubusercontent.com/xiaoyawl/docker-nginx/master/Block_Injections.conf > ${INSTALL_DIR}/conf/Block_Injections.conf && \
-	runDeps="$( scanelf --needed --nobanner --recursive /usr/local | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' | sort -u | xargs -r apk info --installed | sort -u )" && \
+	runDeps="$( scanelf --needed --nobanner --recursive /usr/local/webserver | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' | sort -u | xargs -r apk info --installed | sort -u )" && \
 	runDeps="${runDeps} inotify-tools supervisor logrotate python" && \
 	apk add --no-cache --virtual .ngx-rundeps $runDeps && \
 	apk del .build-deps && \
