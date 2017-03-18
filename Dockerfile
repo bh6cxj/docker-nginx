@@ -77,7 +77,7 @@ RUN set -x && \
 		--add-module=./nginx-rtmp-module \
 		--add-module=./nginx_upstream_check_module \
 		--add-module=./nginx-stream-upsync-module && \
-		--add-module=./ngx_cache_purge-2.0 && \
+		--add-module=${TEMP_DIR}/ngx_cache_purge-2.0 && \
 		#--add-module=./ngx_http_geoip2_module && \
 	make -j$(getconf _NPROCESSORS_ONLN) && \
 	make install && \
