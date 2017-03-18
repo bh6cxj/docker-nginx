@@ -36,7 +36,7 @@ RUN set -x && \
 		--user=www --group=www \
 		--error-log-path=/data/wwwlogs/error.log \
 		--http-log-path=/data/wwwlogs/access.log \
-		--pid-path=/usr/local/webserver/nginx/nginx.pid \
+		--pid-path=/usr/local/nginx/nginx.pid \
 		--lock-path=/var/lock/nginx.lock \
 		--with-pcre \
 		--with-ipv6 \
@@ -80,7 +80,7 @@ RUN set -x && \
 	make -j$(getconf _NPROCESSORS_ONLN) && \
 	make install && \
 	curl -Lks https://raw.githubusercontent.com/xiaoyawl/docker-nginx/master/Block_Injections.conf > ${INSTALL_DIR}/conf/Block_Injections.conf && \
-	runDeps="$( scanelf --needed --nobanner --recursive /usr/local/webserver | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' | sort -u | xargs -r apk info --installed | sort -u )" && \
+	runDeps="$( scanelf --needed --nobanner --recursive /usr/local/ | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' | sort -u | xargs -r apk info --installed | sort -u )" && \
 	runDeps="${runDeps} inotify-tools supervisor logrotate python" && \
 	apk add --no-cache --virtual .ngx-rundeps $runDeps && \
 	apk del .build-deps && \
