@@ -33,7 +33,7 @@ RUN set -x && \
 	sed -ri "s/^(#define NGX_HTTP_AUTOINDEX_NAME_LEN).*/\1  ${AUTOINDEX_NAME_LEN}/" src/http/modules/ngx_http_autoindex_module.c && \
 	sed -ri "s/^(#define NGX_HTTP_AUTOINDEX_PREALLOCATE).*/\1  ${AUTOINDEX_NAME_LEN}/" src/http/modules/ngx_http_autoindex_module.c && \
 	patch -p0 < ./nginx_upstream_check_module/check_1.9.2+.patch && \
-	ls -lh ${TEMP_DIR} && \
+	ls -lh ${TEMP_DIR}/ngx_cache_purge-2.0 && \
 	CFLAGS=-Wno-unused-but-set-variable ./configure --prefix=${INSTALL_DIR} \
 		--user=www --group=www \
 		--error-log-path=/data/wwwlogs/error.log \
