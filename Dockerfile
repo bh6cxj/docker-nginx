@@ -21,6 +21,7 @@ RUN set -x && \
 		build-base linux-headers libxslt-dev gd-dev openssl-dev libstdc++ libgcc patch git tar curl && \
 	curl -Lk ${DOWN_URL} | tar xz -C ${TEMP_DIR} --strip-components=1 && \
 	curl -Lk https://github.com/xiaoyawl/centos_init/raw/master/nginx-mode.tar.gz|tar xz -C ${TEMP_DIR} && \
+	curl -Lk http://labs.frickle.com/files/ngx_cache_purge-2.0.tar.gz|tar xz -C ${TEMP_DIR} && \
 	git clone https://github.com/arut/nginx-rtmp-module.git -b v1.1.7 && \
 	git clone https://github.com/xiaokai-wang/nginx_upstream_check_module.git && \
 	git clone https://github.com/xiaokai-wang/nginx-stream-upsync-module.git && \
@@ -76,6 +77,7 @@ RUN set -x && \
 		--add-module=./nginx-rtmp-module \
 		--add-module=./nginx_upstream_check_module \
 		--add-module=./nginx-stream-upsync-module && \
+		--add-module=./ngx_cache_purge-2.0
 		#--add-module=./ngx_http_geoip2_module && \
 	make -j$(getconf _NPROCESSORS_ONLN) && \
 	make install && \
