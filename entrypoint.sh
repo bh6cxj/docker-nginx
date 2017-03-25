@@ -26,14 +26,14 @@ if [ -d /etc/logrotate.d ]; then
 	cat > /etc/logrotate.d/nginx <<-EOF
 		$(dirname ${DATA_DIR})/wwwlogs/*.log {
 			daily
-			rotate 5
+			rotate 33
 			missingok
 			dateext
 			compress
 			notifempty
 			sharedscripts
 			postrotate
-		    [ -e /var/run/nginx.pid ] && kill -USR1 \`cat /var/run/nginx.pid\`
+		    [ -e /usr/local/nginx/nginx.pid ] && kill -USR1 \`cat /var/run/nginx.pid\`
 			endscript
 		}
 	EOF
