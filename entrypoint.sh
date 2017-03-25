@@ -33,7 +33,7 @@ if [ -d /etc/logrotate.d ]; then
 			notifempty
 			sharedscripts
 			postrotate
-		    [ -e /usr/local/nginx/nginx.pid ] && kill -USR1 \`cat /var/run/nginx.pid\`
+		    [ -e /usr/local/nginx/nginx.pid ] && kill -USR1 \`cat /usr/local/nginx/nginx.pid\`
 			endscript
 		}
 	EOF
